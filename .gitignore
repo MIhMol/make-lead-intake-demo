@@ -1,0 +1,4 @@
+# Never commit unsanitized exports or scratch captures
+*.raw.json
+_clip.png
+*.tmp
