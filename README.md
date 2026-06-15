@@ -19,6 +19,8 @@ One inbound contact-form submission flows through a single Make scenario:
 
 ## Architecture
 
+![Scenario canvas](screenshots/01-canvas.png)
+
 | Step | Make module | Role |
 |---|---|---|
 | 1 | Webhooks (Custom webhook) | Entry point for the contact form |
@@ -30,11 +32,17 @@ One inbound contact-form submission flows through a single Make scenario:
 | 5c | Gmail (Send an email) | Auto-reply to real, non-spam leads (filtered) |
 | 6 | Error handlers (Slack + Skip) | Notify on failure, end the run gracefully |
 
-### A run in action
+### Runs in action
 
-An urgent lead from an existing customer: the record is logged to Airtable and a Slack alert fires, while the auto-reply correctly does not (Claude flagged it as an existing-customer support case, not a new sales lead).
+The same scenario routes two very different inbound messages correctly.
 
-![Urgent-lead run](screenshots/03-execution-urgent.png)
+**A genuine new lead** (a casual pricing question): logged to Airtable and sent an instant auto-reply by email. No Slack alert, because it is not urgent.
+
+![New-lead run: Airtable record created and Gmail auto-reply sent](screenshots/02-execution-autoreply.png)
+
+**An urgent message from an existing customer**: logged to Airtable and raised a Slack alert. No auto-reply, because Claude classified it as an existing-customer support case (`is_lead = false`), not a new sales lead. The automation distinguishes the two on its own.
+
+![Urgent run: Airtable record created and Slack alert sent](screenshots/03-execution-urgent.png)
 
 ## Notable techniques
 
